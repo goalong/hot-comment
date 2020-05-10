@@ -5,6 +5,7 @@ const (
 	ERROR = 500
 	INVALID_PARAMS = 400
 	INVALID_PAGE = 420
+	INVALID_ES_CLIENT = 430
 )
 
 var MsgFlags = map[int]string {
@@ -12,6 +13,7 @@ var MsgFlags = map[int]string {
 	ERROR : "fail",
 	INVALID_PARAMS : "请求参数错误",
 	INVALID_PAGE: "页码或数量参数不合法",
+	INVALID_ES_CLIENT: "ES连接异常",
 }
 
 func GetMsg(code int) string {

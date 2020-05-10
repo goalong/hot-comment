@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/goalong/hot-comment/router/e"
 	"github.com/olivere/elastic/v7"
 	"reflect"
 )
@@ -48,12 +49,18 @@ func PrintQuery(src interface{}) {
 	fmt.Println(string(data))
 }
 
-func Search(keyword string, index_name string, field_name string, indexStruct interface{}, pageNum, pageSize int) []interface{} {
-	query := elastic.NewMatchQuery(field_name, keyword)
+func GetESClient() (*elastic.Client, int){
+	code := e.SUCCESS
 	client, err := elastic.NewClient()
 	if err != nil {
-		// Handle error
+		code = e.INVALID_ES_CLIENT
 	}
+	return client, code
+}
+
+func Search(keyword string, index_name string, field_name string, indexStruct interface{}, pageNum, pageSize int) ([]interface{}, int) {
+	query := elastic.NewMatchQuery(field_name, keyword)
+	client, code := GetESClient()
 	ctx := context.Background()
 	result, err := client.Search().
 		Index(index_name).
@@ -61,54 +68,51 @@ func Search(keyword string, index_name string, field_name string, indexStruct in
 		From((pageNum - 1)*pageSize).Size(pageSize).
 		Do(ctx)
 	if err != nil {
-		return []interface{}{}
+		return []interface{}{}, code
 	}
 	var items []interface{}
 	for _, item := range result.Each(reflect.TypeOf(indexStruct)) {
 		items = append(items, item)
 	}
-	return items
+	return items, code
 }
 
-func SearchArtist(name string, pageNum int, pageSize int) []Artist {
-	arr := Search(name, "artist", "name", Artist{}, pageNum, pageSize)
+func SearchArtist(name string, pageNum int, pageSize int) ([]Artist, int) {
+	arr, code := Search(name, "artist", "name", Artist{}, pageNum, pageSize)
 	var ret []Artist
 	for _, item := range arr {
 		if t, ok := item.(Artist); ok {
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
-func SearchSong(keyword string, pageNum int, pageSize int) []Song {
-	arr := Search(keyword, "song", "name", Song{}, pageNum, pageSize)
+func SearchSong(keyword string, pageNum int, pageSize int) ([]Song, int) {
+	arr, code := Search(keyword, "song", "name", Song{}, pageNum, pageSize)
 	var ret []Song
 	for _, item := range arr {
 		if t, ok := item.(Song); ok {
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
-func SearchComment(keyword string, pageNum int, pageSize int) []Comment {
-	arr := Search(keyword, "comment", "content", Comment{}, pageNum, pageSize)
+func SearchComment(keyword string, pageNum int, pageSize int) ([]Comment, int) {
+	arr, code := Search(keyword, "comment", "content", Comment{}, pageNum, pageSize)
 	var ret []Comment
 	for _, item := range arr {
 		if t, ok := item.(Comment); ok {
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
 // 按评论数对歌曲进行排序
-func GetSongsByCommentCount(pageNum int, pageSize int) []Song {
-	client, err := elastic.NewClient()
-	if err != nil {
-		// Handle error
-	}
+func GetSongsByCommentCount(pageNum int, pageSize int) ([]Song, int) {
+	client, code := GetESClient()
 	termQuery := elastic.NewMatchAllQuery()
 	ctx := context.Background()
 	searchResult, err := client.Search().
@@ -130,15 +134,12 @@ func GetSongsByCommentCount(pageNum int, pageSize int) []Song {
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
 // 按点赞数排行获取评论
-func GetCommentsByLikeCount(pageNum int, pageSize int)  []Comment{
-	client, err := elastic.NewClient()
-	if err != nil {
-		// Handle error
-	}
+func GetCommentsByLikeCount(pageNum int, pageSize int)  ([]Comment, int){
+	client, code := GetESClient()
 	termQuery := elastic.NewMatchAllQuery()
 	ctx := context.Background()
 	searchResult, err := client.Search().
@@ -160,15 +161,12 @@ func GetCommentsByLikeCount(pageNum int, pageSize int)  []Comment{
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
 // 根据歌手ID获取歌曲列表
-func GetSongsByArtistId(artistId int, pageNum int, pageSize int)  []Song{
-	client, err := elastic.NewClient()
-	if err != nil {
-		// Handle error
-	}
+func GetSongsByArtistId(artistId int, pageNum int, pageSize int)  ([]Song, int){
+	client, code := GetESClient()
 	termQuery := elastic.NewTermQuery("artist", artistId)
 	ctx := context.Background()
 	searchResult, err := client.Search().
@@ -189,15 +187,12 @@ func GetSongsByArtistId(artistId int, pageNum int, pageSize int)  []Song{
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }
 
 // 根据歌曲ID获取评论，按评论的点赞量排序
-func GetCommentsBySongId(songId int, pageNum int, pageSize int)  []Comment{
-	client, err := elastic.NewClient()
-	if err != nil {
-		// Handle error
-	}
+func GetCommentsBySongId(songId int, pageNum int, pageSize int)  ([]Comment, int){
+	client, code := GetESClient()
 	termQuery := elastic.NewTermQuery("song", songId)
 	ctx := context.Background()
 	searchResult, err := client.Search().
@@ -219,5 +214,5 @@ func GetCommentsBySongId(songId int, pageNum int, pageSize int)  []Comment{
 			ret = append(ret, t)
 		}
 	}
-	return ret
+	return ret, code
 }

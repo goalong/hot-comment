@@ -42,7 +42,7 @@ func GetHotComments(c *gin.Context) {
 
 	}
 
-	data["items"] = search.GetCommentsByLikeCount(pageNum, pageSize)
+	data["items"], code = search.GetCommentsByLikeCount(pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
 		"code": code,
@@ -68,10 +68,10 @@ func GetHotSongs(c *gin.Context) {
 		return
 	}
 
-	data["items"] = search.GetSongsByCommentCount(pageNum, pageSize)
+	data["items"], code = search.GetSongsByCommentCount(pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
@@ -96,10 +96,10 @@ func SearchSongs(c *gin.Context) {
 	}
 
 	keyword := c.Query("keyword")
-	data["items"] = search.SearchSong(keyword, pageNum, pageSize)
+	data["items"], code = search.SearchSong(keyword, pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
@@ -125,10 +125,10 @@ func SearchComments(c *gin.Context) {
 	}
 
 	keyword := c.Query("keyword")
-	data["items"] = search.SearchComment(keyword, pageNum, pageSize)
+	data["items"], code = search.SearchComment(keyword, pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
@@ -154,10 +154,10 @@ func SearchArtists(c *gin.Context) {
 	}
 
 	keyword := c.Query("keyword")
-	data["items"] = search.SearchArtist(keyword, pageNum, pageSize)
+	data["items"], code = search.SearchArtist(keyword, pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
@@ -186,10 +186,10 @@ func GetSongsByArtistId(c *gin.Context) {
 		return
 
 	}
-	data["items"] = search.GetSongsByArtistId(artistId, pageNum, pageSize)
+	data["items"], code = search.GetSongsByArtistId(artistId, pageNum, pageSize)
 
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
@@ -217,9 +217,9 @@ func GetCommentsBySongId(c *gin.Context) {
 		})
 		return
 	}
-	data["items"] = search.GetCommentsBySongId(songId, pageNum, pageSize)
+	data["items"], code = search.GetCommentsBySongId(songId, pageNum, pageSize)
 	c.JSON(http.StatusOK, gin.H{
-		"code": 200,
+		"code": code,
 		"msg":  "",
 		"data": data,
 	})
