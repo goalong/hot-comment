@@ -10,7 +10,11 @@
 * 获取热门歌曲，按评论数排行
 * 获取热门评论，按点赞数排行
 
-[这里](http://47.99.131.182/swagger/index.html#)是swagger的web页面，可以在上面随便点击一个接口，点右边的Try it out, 然后输入参数，一般是页码和关键字，点击Execute来发请求，就可以看到接口的结果了，enjoy it.
+[这里](http://47.99.131.182/swagger/index.html#)是swagger的web页面，可以在上面随便点击一个接口，点右边的Try it out, 然后输入参数，一般是页码和关键字，点击Execute来发请求，就可以看到接口的结果了。
+
+最下面那张截图是获取热门评论的接口的结果，字段like_count是点赞量，可以看到排名第一的评论点赞量是一百五十多万了。
+
+Enjoy it.
 
 
 ![](https://i.loli.net/2020/05/10/3PFqmcJxawsijE1.png)
