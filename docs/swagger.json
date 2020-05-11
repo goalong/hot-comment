@@ -7,7 +7,7 @@
         "license": {},
         "version": "1.0"
     },
-    "host": "47.99.131.182",
+    "host": "127.0.0.1:8080",
     "basePath": "/",
     "paths": {
         "/api/comments": {
@@ -21,6 +21,13 @@
                         "type": "integer",
                         "description": "页码",
                         "name": "page_num",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     },
@@ -55,6 +62,13 @@
                         "name": "page_num",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -80,6 +94,13 @@
                         "name": "page_num",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -103,6 +124,13 @@
                         "type": "integer",
                         "description": "页码",
                         "name": "page_num",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     },
@@ -139,6 +167,13 @@
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "type": "string",
                         "description": "关键词",
                         "name": "keyword",
@@ -171,6 +206,13 @@
                         "required": true
                     },
                     {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
                         "type": "string",
                         "description": "关键词",
                         "name": "keyword",
@@ -199,6 +241,13 @@
                         "type": "integer",
                         "description": "页码",
                         "name": "page_num",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页数量",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     },
